@@ -27,6 +27,11 @@ def example_usage():
     result_employee_by_card_pid = employee_db.find_employee_by_card_pid(card_pid_to_find)
     print(f"Found Employee with Card PID {card_pid_to_find}:", result_employee_by_card_pid)
 
+    # Finding an employee by card pid where there is no such card pid
+    card_pid_to_find = 111
+    result_employee_by_card_pid = employee_db.find_employee_by_card_pid(card_pid_to_find)
+    print(f"Found Employee with Card PID {card_pid_to_find}:", result_employee_by_card_pid)
+
     # Finding all card events between two timestamps
     all_card_events_between_timestamps = employee_db.find_all_card_events_between(datetime(2024, 1, 23, 12, 0, 0),
                                                                                   datetime(2024, 1, 23, 14, 30, 0))
@@ -38,6 +43,10 @@ def example_usage():
 
     # Finding an employee
     result_employee = employee_db.find_employee(employee_id=1)
+    print("Found Employee:", result_employee)
+
+    # Finding an employee where there is no such employee id
+    result_employee = employee_db.find_employee(employee_id=1002)
     print("Found Employee:", result_employee)
 
     # Finding all employees
