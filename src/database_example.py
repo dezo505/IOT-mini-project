@@ -22,6 +22,11 @@ def example_usage():
     employee_db.add_card_event(card_pid=12347, employee_id=3, timestamp="2024-01-23 14:00:00", access_granted=False)
     employee_db.add_card_event(card_pid=12348, employee_id=None, timestamp="2024-01-23 15:00:00", access_granted=False)
 
+    # Finding an employee by card pid
+    card_pid_to_find = 12346
+    result_employee_by_card_pid = employee_db.find_employee_by_card_pid(card_pid_to_find)
+    print(f"Found Employee with Card PID {card_pid_to_find}:", result_employee_by_card_pid)
+
     # Finding all card events between two timestamps
     all_card_events_between_timestamps = employee_db.find_all_card_events_between(datetime(2024, 1, 23, 12, 0, 0),
                                                                                   datetime(2024, 1, 23, 14, 30, 0))
