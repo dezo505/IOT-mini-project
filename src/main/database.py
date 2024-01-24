@@ -186,6 +186,21 @@ class EmployeeDatabase:
         except sqlite3.Error as e:
             print(f"Error getting all card events: {e}")
 
+    def find_employee_by_card_pid(self, card_pid):
+        try:
+            with sqlite3.connect(self.db_file) as connection:
+                cursor = connection.cursor()
+
+                cursor.execute('''
+                    SELECT * FROM EMPLOYEES
+                    WHERE card_pid=?
+                ''', (card_pid,))
+
+                result = cursor.fetchone()
+                return self.Employee(*result) if result else None
+        except sqlite3.Error as e:
+            print(f"Error finding employee by card pid {card_pid}: {e}")
+
     def clear_database(self):
         try:
             with sqlite3.connect(self.db_file) as connection:
