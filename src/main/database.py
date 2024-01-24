@@ -172,6 +172,20 @@ class EmployeeDatabase:
         except sqlite3.Error as e:
             print(f"Error finding card events between {start_timestamp} and {finish_timestamp}: {e}")
 
+    def get_all_card_events(self):
+        try:
+            with sqlite3.connect(self.db_file) as connection:
+                cursor = connection.cursor()
+
+                cursor.execute('''
+                    SELECT * FROM CARD_EVENTS
+                ''')
+
+                result = cursor.fetchall()
+                return [self.CardEvent(*row) for row in result]
+        except sqlite3.Error as e:
+            print(f"Error getting all card events: {e}")
+
     def clear_database(self):
         try:
             with sqlite3.connect(self.db_file) as connection:
