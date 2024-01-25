@@ -68,6 +68,7 @@ class AddEmployeeWindow:
         else:
             messagebox.showwarning("Błąd", "Wszystkie pola są wymagane.")
 
+
 class EmployeeLogWindow:
     def __init__(self, master, employee_db):
         self.master = master
@@ -81,7 +82,8 @@ class EmployeeLogWindow:
         self.frame.pack(pady=20)
 
         # Treeview do wyświetlania logów
-        self.log_treeview = ttk.Treeview(self.frame, columns=("Timestamp", "Numer Karty", "Status Dostępu"), show="headings")
+        self.log_treeview = ttk.Treeview(self.frame, columns=("Timestamp", "Numer Karty", "Status Dostępu"),
+                                         show="headings")
         self.log_treeview.grid(row=0, column=0, padx=10, pady=10)
 
         # Ustaw nagłówki kolumn
@@ -102,7 +104,9 @@ class EmployeeLogWindow:
 
         # Wypełnij Treeview danymi
         for event in card_events:
-            self.log_treeview.insert("", "end", values=(event.timestamp, event.card_pid, 'odczytana' if event.access_granted else 'odmowa dostępu'))
+            self.log_treeview.insert("", "end", values=(
+            event.timestamp, event.card_pid, 'odczytana' if event.access_granted else 'odmowa dostępu'))
+
 
 class EmployeeWindow:
     def __init__(self, master, employee_db):
@@ -117,7 +121,8 @@ class EmployeeWindow:
         self.frame.pack(pady=20)
 
         # Treeview do wyświetlania pracowników
-        self.employee_treeview = ttk.Treeview(self.frame, columns=("ID", "Imię", "Nazwisko", "Numer Karty"), show="headings")
+        self.employee_treeview = ttk.Treeview(self.frame, columns=("ID", "Imię", "Nazwisko", "Numer Karty"),
+                                              show="headings")
         self.employee_treeview.grid(row=0, column=0, padx=10, pady=10)
 
         # Ustaw nagłówki kolumn
@@ -139,7 +144,9 @@ class EmployeeWindow:
 
         # Wypełnij Treeview danymi
         for employee in employees:
-            self.employee_treeview.insert("", "end", values=(employee.id, employee.name, employee.lastname, employee.card_pid))
+            self.employee_treeview.insert("", "end",
+                                          values=(employee.id, employee.name, employee.lastname, employee.card_pid))
+
 
 class EmployeeApp:
     def __init__(self, master):
@@ -160,7 +167,8 @@ class EmployeeApp:
         self.show_logs_button.grid(row=1, column=0, pady=5)
 
         # Przycisk "Wyświetl pracowników"
-        self.show_employees_button = tk.Button(self.frame, text="Wyświetl pracowników", command=self.open_employees_window)
+        self.show_employees_button = tk.Button(self.frame, text="Wyświetl pracowników",
+                                               command=self.open_employees_window)
         self.show_employees_button.grid(row=2, column=0, pady=5)
 
         # Przycisk "Wyjście z programu"
@@ -197,6 +205,7 @@ class EmployeeApp:
         # Tutaj możesz dodać kod do obsługi dodawania pracownika do bazy danych
         self.employee_db.add_employee(name, lastname, card_pid)
         messagebox.showinfo("Sukces", f"Dodano pracownika: {name} {lastname}")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
