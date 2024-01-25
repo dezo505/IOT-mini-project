@@ -182,6 +182,7 @@ class EmployeeApp:
 
         # Inicjalizacja bazy danych
         self.employee_db = EmployeeDatabase()
+        self.employee_db.init_database()
 
     def open_add_employee_window(self):
         # Otwórz okno do dodawania pracownika
