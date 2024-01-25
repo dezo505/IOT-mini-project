@@ -3,7 +3,7 @@ from time import sleep
 
 import paho.mqtt.client as mqtt
 from src.main.card_detector import CardDetector
-from src.main.utils import blink_red, blink_green
+from src.main.blink import blink_red, blink_green
 
 terminal_id = "T0"
 broker = "localhost"
