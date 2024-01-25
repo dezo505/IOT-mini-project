@@ -1,25 +1,26 @@
+from config import *
+
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 
-import paho.mqtt.client as mqtt
-
+from src.main.card_detector import CardDetector
 from src.main.database import EmployeeDatabase
+
+import RPi.GPIO as GPIO
 
 db = EmployeeDatabase()
 db.init_database()
 
 
 class AddEmployeeWindow:
-    def __init__(self, master, callback, mqtt_client):
+    def __init__(self, master, callback):
         self.master = master
         self.master.title("Dodaj pracownika")
+        self.card_detector = CardDetector()
 
         # Callback to the main window
         self.callback = callback
-
-        # MQTT Client
-        self.mqtt_client = mqtt_client
 
         # Frame
         self.frame = tk.Frame(master)
@@ -47,17 +48,20 @@ class AddEmployeeWindow:
         self.add_employee_button = tk.Button(self.frame, text="Dodaj pracownika", command=self.add_employee)
         self.add_employee_button.grid(row=3, columnspan=2, pady=10)
 
-        # Subskrybuj temat MQTT
-        self.mqtt_client.subscribe("numer_karty")
+        self.cancel = False
+        GPIO.add_event_detect(buttonRed, GPIO.FALLING, callback=self.buttonPressedCallback, bouncetime=200)
+        while not self.cancel:
+            try:
+                card_reading = self.card_detector.read_card()
 
-        # Przypisz funkcję do obsługi nowych wiadomości MQTT
-        self.mqtt_client.message_callback_add("numer_karty", self.on_card_number_received)
+                if card_reading.result:
+                    self.master.destroy()
+                    break
+            except Exception as e:
+                print("Error reading card:", e)
 
-    def on_card_number_received(self, client, userdata, message):
-        # Funkcja wywołana po odebraniu nowej wiadomości MQTT
-        card_number = message.payload.decode("utf-8")
-        self.card_pid_entry.delete(0, tk.END)  # Wyczyść aktualny numer karty
-        self.card_pid_entry.insert(0, card_number)  # Wstaw nowy numer karty
+    def buttonPressedCallback(self, channel):
+        self.cancel = True
 
     def add_employee(self):
         name = self.name_entry.get()
@@ -179,11 +183,6 @@ class EmployeeApp:
         self.exit_button = tk.Button(self.frame, text="Wyjście z programu", command=self.master.destroy)
         self.exit_button.grid(row=3, column=0, pady=5)
 
-        # Inicjalizacja klienta MQTT
-        self.mqtt_client = mqtt.Client()
-        # self.mqtt_client.connect("localhost", 1883, 60)
-        # self.mqtt_client.loop_start()  # Rozpocznij pętlę MQTT
-
         # Inicjalizacja bazy danych
         self.employee_db = db
 
@@ -191,7 +190,7 @@ class EmployeeApp:
         # Otwórz okno do dodawania pracownika
         add_employee_window = tk.Toplevel(self.master)
         add_employee_window.grab_set()  # Zablokuj główne okno
-        AddEmployeeWindow(add_employee_window, self.add_employee, self.mqtt_client)
+        AddEmployeeWindow(add_employee_window, self.add_employee)
 
     def open_log_window(self):
         # Otwórz okno z logami

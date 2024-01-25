@@ -61,7 +61,7 @@ def run_sender():
             try:
                 cardReading = cardDetector.read_card()
 
-                if cardReading["result"]:
+                if cardReading["result"]:  # tutaj .result
                     call_card_detection(cardReading["card_pid"])
 
             except Exception as e:
