@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+from time import sleep
 
 import paho.mqtt.client as mqtt
 from src.main.card_detector import CardDetector
+from src.main.utils import blink_red, blink_green
 
 terminal_id = "T0"
 broker = "localhost"
@@ -31,10 +33,17 @@ def on_access_response(client, userdata, message):
         message_data = message.payload.decode()
         if message_data == "access_granted":
             print("Access granted!")
+            blink_green(0.5)
         elif message_data == "access_denied":
             print("Access denied!")
+            blink_red(0.5)
         else:
             print("Unknown response:", message_data)
+            blink_red(0.1)
+            sleep(0.1)
+            blink_red(0.1)
+            sleep(0.1)
+            blink_red(0.1)
     except Exception as e:
         print("Error processing message:", e)
 
