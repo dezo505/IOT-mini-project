@@ -19,7 +19,7 @@ class LedControl:
 
         time.sleep(duration)
 
-        pixels.fill(BLACK)
+        pixels.fill(LedControl.BLACK)
         pixels.show()
 
     @staticmethod
@@ -31,7 +31,7 @@ class LedControl:
 
         time.sleep(duration)
 
-        pixels.fill(BLACK)
+        pixels.fill(LedControl.BLACK)
         pixels.show()
 
     @staticmethod

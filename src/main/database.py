@@ -21,7 +21,7 @@ class EmployeeDatabase:
                         id INTEGER PRIMARY KEY,
                         name TEXT,
                         lastname TEXT,
-                        card_pid INTEGER
+                        card_pid INTEGER UNIQUE
                     )
                 ''')
 
@@ -52,8 +52,10 @@ class EmployeeDatabase:
 
                 connection.commit()
                 print("Employee added successfully.")
+                return True
         except sqlite3.Error as e:
             print(f"Error adding employee: {e}")
+            return False
 
     def add_card_event(self, card_pid, employee_id=None, timestamp=None, access_granted=False):
         try:

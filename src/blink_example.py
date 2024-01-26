@@ -1,6 +1,6 @@
 import time
 
-from src.main.blink import blink_green, blink_red
+from main.blink import blink_green, blink_red
 
 
 def example_usage():
@@ -10,7 +10,7 @@ def example_usage():
     time.sleep(1)
 
     blink_green(2)
-    blink_green(2)
+    blink_red(2)
 
 
 if __name__ == "__main__":

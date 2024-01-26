@@ -1,4 +1,4 @@
-from config import *
+from main.config import *
 
 import time
 import board

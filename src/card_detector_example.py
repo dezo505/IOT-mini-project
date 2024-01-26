@@ -13,8 +13,8 @@ def example_usage():
         else:
             print("No card detected.")
 
-        print("Card pid: " + card_reading.card_pid)
-        print("timestamp: " + card_reading.timestamp)
+        print(f"Card pid: {card_reading.card_pid}")
+        print(f"timestamp: {card_reading.timestamp}")
 
 
 if __name__ == "__main__":

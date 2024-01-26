@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+from oled_writer import DrawControl
 from datetime import datetime
 import paho.mqtt.client as mqtt
-from src.main.database import EmployeeDatabase
+from database import EmployeeDatabase
 
 broker = "localhost"
 client = mqtt.Client()
@@ -12,16 +13,19 @@ db.init_database()
 def on_message(client, userdata, message):
     try:
         card_pid = message.payload.decode()
+
         employee = db.find_employee_by_card_pid(card_pid)
 
         if employee:
             access_granted = True
             db.add_card_event(card_pid, employee.id, datetime.now(), access_granted)
             client.publish("card/access_response", "access_granted")
+            DrawControl.writeMessage("Access granted to", f"{employee.name} {employee.lastname}")
         else:
             access_granted = False
             db.add_card_event(card_pid, None, datetime.now(), access_granted)
             client.publish("card/access_response", "access_denied")
+            DrawControl.writeMessage("Access denied!", "")
     except Exception as e:
         print("Error processing message:", e)
 

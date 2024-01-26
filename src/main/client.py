@@ -2,8 +2,9 @@
 from time import sleep
 
 import paho.mqtt.client as mqtt
-from src.main.card_detector import CardDetector
-from src.main.led_control import *
+from card_detector import CardDetector
+from led_control import *
+from buzzer_control import BuzzerControl
 
 terminal_id = "T0"
 broker = "localhost"
@@ -37,11 +38,11 @@ def on_access_response(client, userdata, message):
             BuzzerControl.changeBuzzerState(True)
             time.sleep(0.5)
             BuzzerControl.changeBuzzerState(False)
-            LedControl.turnOffLed(LedControl.GREEN)
+            LedControl.turnOffLed()
             #LedControl.blink_green(0.5)
         elif message_data == "access_denied":
             print("Access denied!")
-            LedControl.turnOnColor(LedControl.GREEN)
+            LedControl.turnOnColor(LedControl.RED)
             BuzzerControl.changeBuzzerState(True)
             time.sleep(0.2)
             BuzzerControl.changeBuzzerState(False)
@@ -50,7 +51,7 @@ def on_access_response(client, userdata, message):
             time.sleep(0.25)
             BuzzerControl.changeBuzzerState(False)
 
-            LedControl.turnOffLed(LedControl.GREEN)
+            LedControl.turnOffLed()
         else:
             print("Unknown response:", message_data)
             LedControl.blink_red(0.1)
@@ -66,6 +67,7 @@ def run_sender():
     connect_to_broker()
 
     try:
+        client.subscribe("card/access_response")
         client.message_callback_add("card/access_response", on_access_response)
         client.loop_start()
 
@@ -75,8 +77,8 @@ def run_sender():
             try:
                 cardReading = cardDetector.read_card()
 
-                if cardReading["result"]:  # tutaj .result
-                    call_card_detection(cardReading["card_pid"])
+                if cardReading.result:
+                    call_card_detection(cardReading.card_pid)
 
             except Exception as e:
                 print("Error reading card:", e)

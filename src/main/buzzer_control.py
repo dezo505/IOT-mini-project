@@ -1,6 +1,5 @@
-from config import *  # pylint: disable=unused-wildcard-import
+from config import * 
 import RPi.GPIO as GPIO
-import time
 
 class BuzzerControl:
     @staticmethod

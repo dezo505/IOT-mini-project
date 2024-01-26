@@ -24,9 +24,9 @@ class CardDetector:
         if not self.last_reading_result and fridRead.result:
             result = True
 
-        self.last_reading_result = result
+        self.last_reading_result = fridRead.result
 
-        return self.RFIDResult(result=result, timestamp=fridRead.timestamp, card_pid=fridRead.timestamp)
+        return self.RFIDResult(result=result, timestamp=fridRead.timestamp, card_pid=fridRead.card_pid)
 
     def _rfid_read(self):
         card_reader = self.card_reader
